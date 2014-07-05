@@ -5,22 +5,6 @@ ifneq ($(TARGET_BOOTANIMATION_NAME),)
         vendor/cm/prebuilt/common/bootanimation/$(TARGET_BOOTANIMATION_NAME).zip:system/media/bootanimation.zip
 endif
 
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.rommanager.developerid=hephappy
-
-#    ro.goo.board=$(TARGET_PRODUCT) \
-#    ro.goo.developerid=hephappy \
-#    ro.goo.rom=lgics \
-#    ro.goo.version=5
-
-# OTAUpdater
-#PRODUCT_PROPERTY_OVERRIDES += \
-#    otaupdater.otaid=cm9p500 \
-#    otaupdater.otatime=$(shell date -u +%Y%m%d-%H%m) \
-#    otaupdater.otaver=$(shell date -u +%Y%m%d)
-
-
-
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -61,15 +45,19 @@ PRODUCT_COPY_FILES += \
     vendor/cm/prebuilt/common/bin/compcache:system/bin/compcache \
     vendor/cm/prebuilt/common/bin/handle_compcache:system/bin/handle_compcache
 
-PRODUCT_COPY_FILES +=  \
+PRODUCT_COPY_FILES += \
     vendor/cm/proprietary/Term.apk:system/app/Term.apk \
     vendor/cm/proprietary/lib/armeabi/libjackpal-androidterm4.so:system/lib/libjackpal-androidterm4.so \
     vendor/cm/prebuilt/common/apps/Superuser.apk:system/app/Superuser.apk
 
+ifneq ($(BOARD_NO_CAMERAEFFECTS),true)
+
 # Bring in camera effects
-PRODUCT_COPY_FILES +=  \
+PRODUCT_COPY_FILES += \
     vendor/cm/prebuilt/common/media/LMprec_508.emd:system/media/LMprec_508.emd \
     vendor/cm/prebuilt/common/media/PFFprec_600.emd:system/media/PFFprec_600.emd
+    
+endif
 
 # Enable SIP+VoIP on all targets
 PRODUCT_COPY_FILES += \
@@ -94,14 +82,22 @@ PRODUCT_PACKAGES += \
     SpareParts \
     su
 
-#    Superuser \
-#    Superuser.apk \
-
 # Optional CM packages
 PRODUCT_PACKAGES += \
-    VideoEditor \
     VoiceDialer \
-    SoundRecorder \
+    SoundRecorder
+    
+ifneq ($(BOARD_NO_HWCODECS),true)
+
+PRODUCT_PACKAGES += \
+    VideoEditor
+
+endif 
+    
+ifneq ($(BOARD_NO_LIVEWALLPAPERS),true)
+
+# LiveWallpapers
+PRODUCT_PACKAGES += \
     Basic \
     HoloSpiralWallpaper \
     MagicSmokeWallpapers \
@@ -111,6 +107,8 @@ PRODUCT_PACKAGES += \
     LiveWallpapersPicker \
     VisualizationWallpapers \
     PhaseBeam
+    
+endif
 
 # Custom CM packages
 PRODUCT_PACKAGES += \
@@ -135,8 +133,8 @@ PRODUCT_PACKAGE_OVERLAYS += vendor/cm/overlay/common
 
 PRODUCT_VERSION_MAJOR = 9
 PRODUCT_VERSION_MINOR = 2
-PRODUCT_VERSION_MAINTENANCE = 2
-PRODUCT_VERSION_DEVICE_SPECIFIC = -ICS-PLUS
+PRODUCT_VERSION_MAINTENANCE = 0
+PRODUCT_VERSION_DEVICE_SPECIFIC = -GearICS
 
 CM_BUILDTYPE := RELEASE
 
