@@ -47,8 +47,7 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     vendor/cm/proprietary/Term.apk:system/app/Term.apk \
-    vendor/cm/proprietary/lib/armeabi/libjackpal-androidterm4.so:system/lib/libjackpal-androidterm4.so \
-    vendor/cm/prebuilt/common/apps/Superuser.apk:system/app/Superuser.apk
+    vendor/cm/proprietary/lib/armeabi/libjackpal-androidterm4.so:system/lib/libjackpal-androidterm4.so
 
 ifneq ($(BOARD_NO_CAMERAEFFECTS),true)
 
@@ -79,8 +78,23 @@ PRODUCT_PACKAGES += \
     Camera \
     Development \
     LatinIME \
-    SpareParts \
+    SpareParts
+
+# Superuser    
+ifeq ($(BOARD_USE_INSECURESU),true)
+
+PRODUCT_COPY_FILES += \
+    vendor/cm/prebuilt/common/xbin/su:system/xbin/su
+
+else
+
+PRODUCT_COPY_FILES += \
+    vendor/cm/prebuilt/common/apps/Superuser.apk:system/app/Superuser.apk
+
+PRODUCT_PACKAGES += \
     su
+
+endif
 
 # Optional CM packages
 PRODUCT_PACKAGES += \
@@ -134,7 +148,7 @@ PRODUCT_PACKAGE_OVERLAYS += vendor/cm/overlay/common
 PRODUCT_VERSION_MAJOR = 9
 PRODUCT_VERSION_MINOR = 2
 PRODUCT_VERSION_MAINTENANCE = 0
-PRODUCT_VERSION_DEVICE_SPECIFIC = -GearICS
+PRODUCT_VERSION_DEVICE_SPECIFIC = -GearCM
 
 CM_BUILDTYPE := RELEASE
 
